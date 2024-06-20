@@ -1,0 +1,25 @@
+﻿@page
+@using HE176084_MinhBT_A3.Pages.AppUser
+@model RegisterModel
+
+<h2>Register</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="RegisterUser.Fullname"></label>
+        <input asp-for="RegisterUser.Fullname" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="RegisterUser.Address"></label>
+        <input asp-for="RegisterUser.Address" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="RegisterUser.Email"></label>
+        <input asp-for="RegisterUser.Email" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="RegisterUser.Password"></label>
+        <input asp-for="RegisterUser.Password" type="password" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
