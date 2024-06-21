@@ -60,7 +60,8 @@ namespace HE176084_MinhBT_A3.Pages.Posts
                 return RedirectToPage("/AppUsers/Login");
 
             }
-
+            Post.AuthorID = HttpContext.Session.GetInt32("UserID").Value;
+            Post.UpdatedDate = DateTime.Now;
             _context.Attach(Post).State = EntityState.Modified;
 
             try
