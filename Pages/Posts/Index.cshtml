@@ -47,7 +47,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Post)
+        @* @foreach (var item in Model.Post)
         {
             if (string.IsNullOrEmpty(Request.Query["searchInput"]) ||
                 item.Title.Contains(Request.Query["searchInput"], StringComparison.OrdinalIgnoreCase) ||
@@ -83,6 +83,6 @@
                     </td>
                 </tr>
             }
-        }
+        } *@
     </tbody>
 </table>

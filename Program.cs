@@ -1,3 +1,4 @@
+using HE176084_MinhBT_A3.Hubs;
 using HE176084_MinhBT_A3.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 builder.Services.AddDbContext<BlogContext>();
+builder.Services.AddSignalR();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,6 +29,7 @@ app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();
+app.MapHub<SignalRHub>("/signalrhub");
 
 app.MapRazorPages();
 

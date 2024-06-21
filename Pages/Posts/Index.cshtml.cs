@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using HE176084_MinhBT_A3.Models;
+using System.Text.Json;
 
 namespace HE176084_MinhBT_A3.Pages.Posts
 {
@@ -40,6 +41,12 @@ namespace HE176084_MinhBT_A3.Pages.Posts
             {
                 Post = await _context.Posts.ToArrayAsync();
             }
+        }
+        public async Task<ContentResult> OnGetGetPostsAsync()
+        {
+            var posts = await _context.Posts.ToArrayAsync();
+            string jsonPost = JsonSerializer.Serialize(posts);
+            return Content(jsonPost);
         }
     }
 }

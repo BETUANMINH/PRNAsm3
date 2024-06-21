@@ -1,4 +1,34 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿ShowPost();
+var connection = new signalR.HubConnectionBuilder().withUrl("/signalrhub").build();
+connection.start().catch(err => alert(err));
 
-// Write your JavaScript code.
+connection.on("LoadPosts", function () {
+    ShowPost();
+});
+
+function ShowPost() {
+    let tbody = document.querySelector("tbody");
+    tbody.innerHTML = "";
+
+    fetch("/Posts/Index?handler=GetPosts")
+        .then(res => res.json())
+        .then(data => data.forEach(item => {
+            console.log(item);
+            let html = `<tr> 
+                    <td>${item.CreatedDate}</td>
+                    <td>${item.UpdatedDate}</td>
+                    <td>${item.Title}</td>
+                    <td>${item.Content}</td>
+                    <td>${item.PublishStatus}</td>
+                    <td>${item.AuthorID}</td>
+                    <td>${item.CategoryID}</td>
+                    <td>
+                        <a href='/Posts/Edit?id=${item.PostID}'>Edit</a>
+                        <a href='/Posts/Delete?id=${item.PostID}'>Delete</a>
+                    </td>
+                </tr>
+                `
+            tbody.innerHTML += html;
+        }))
+
+}

@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HE176084_MinhBT_A3.Models;
+using HE176084_MinhBT_A3.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace HE176084_MinhBT_A3.Pages.Posts
 {
     public class EditModel : PageModel
     {
         private readonly HE176084_MinhBT_A3.Models.BlogContext _context;
+        private readonly IHubContext<SignalRHub> _hubContext;
 
-        public EditModel(HE176084_MinhBT_A3.Models.BlogContext context)
+        public EditModel(HE176084_MinhBT_A3.Models.BlogContext context, IHubContext<SignalRHub> hub)
         {
             _context = context;
+            _hubContext = hub;
         }
 
         [BindProperty]
@@ -56,10 +60,6 @@ namespace HE176084_MinhBT_A3.Pages.Posts
                 return RedirectToPage("/AppUsers/Login");
 
             }
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
 
             _context.Attach(Post).State = EntityState.Modified;
 
@@ -78,7 +78,7 @@ namespace HE176084_MinhBT_A3.Pages.Posts
                     throw;
                 }
             }
-
+            await _hubContext.Clients.All.SendAsync("LoadPosts");
             return RedirectToPage("./Index");
         }
 
