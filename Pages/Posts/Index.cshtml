@@ -7,82 +7,86 @@
 
 <h1>Index</h1>
 
+<div class="search-container">
+    <div class="form-group mr-2 flex-grow-1">
+        <label for="searchInput" class="sr-only">Search:</label>
+        <input type="text" id="searchInput" class="form-control" placeholder="Search..." />
+    </div>
+    <button id="searchbtn" type="button" class="btn btn-primary mt-3" onclick="Filter()">Search</button>
+</div>
+
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create" class="btn btn-success">Create New</a>
 </p>
 
-<form method="get">
-    <div class="form-group">
-        <label for="searchInput">Search:</label>
-        <input type="text" id="searchInput" name="searchInput" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Search</button>
-</form>
-
-<table class="table">
-    <thead>
+<table class="table table-bordered table-hover">
+    <thead class="thead-light">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Post[0].CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Post[0].UpdatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Post[0].Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Post[0].Content)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Post[0].PublishStatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Post[0].AuthorID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Post[0].CategoryID)
-            </th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.Post[0].PostID)</th>
+            <th>@Html.DisplayNameFor(model => model.Post[0].CreatedDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Post[0].UpdatedDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Post[0].Title)</th>
+            <th>@Html.DisplayNameFor(model => model.Post[0].Content)</th>
+            <th>@Html.DisplayNameFor(model => model.Post[0].PublishStatus)</th>
+            <th>@Html.DisplayNameFor(model => model.Post[0].AuthorID)</th>
+            <th>@Html.DisplayNameFor(model => model.Post[0].CategoryID)</th>
+            <th>@Html.DisplayNameFor(model => model.Post[0].Category.CategoryName)</th>
+            <th>@Html.DisplayNameFor(model => model.Post[0].Category.Description)</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        @* @foreach (var item in Model.Post)
-        {
-            if (string.IsNullOrEmpty(Request.Query["searchInput"]) ||
-                item.Title.Contains(Request.Query["searchInput"], StringComparison.OrdinalIgnoreCase) ||
-                item.Content.Contains(Request.Query["searchInput"], StringComparison.OrdinalIgnoreCase) ||
-                item.PostID.ToString().Equals(Request.Query["searchInput"], StringComparison.OrdinalIgnoreCase))
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreatedDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UpdatedDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Content)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PublishStatus)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Author.UserID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Category.CategoryID)
-                    </td>
-                    <td>
-                        <a asp-page="./Edit" asp-route-id="@item.PostID">Edit</a> |
-                        <a asp-page="./Details" asp-route-id="@item.PostID">Details</a> |
-                        <a asp-page="./Delete" asp-route-id="@item.PostID">Delete</a>
-                    </td>
-                </tr>
-            }
-        } *@
+        @* Table content will be populated by JavaScript *@
     </tbody>
 </table>
+
+<div class="pagination-container">
+    <button id="prevPage" class="btn btn-primary" onclick="previousPage()">Previous</button>
+    <span id="pageInfo"></span>
+    <button id="nextPage" class="btn btn-primary" onclick="nextPage()">Next</button>
+</div>
+
+<input type="hidden" id="currentPage" value="1" />
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/signalR.js"></script>
+<script>
+    
+</script>
+
+<style>
+    .search-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        flex-grow: 1;
+    }
+
+    .form-control {
+        margin-right: 10px;
+    }
+
+    .btn-primary {
+        white-space: nowrap;
+    }
+
+    .btn-success {
+        margin-top: 20px;
+    }
+
+    .table {
+        margin-top: 20px;
+    }
+
+    .thead-light th {
+        background-color: #f8f9fa;
+    }
+
+    .pagination-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+</style>

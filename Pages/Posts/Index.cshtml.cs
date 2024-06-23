@@ -6,47 +6,68 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using HE176084_MinhBT_A3.Models;
-using System.Text.Json;
 
 namespace HE176084_MinhBT_A3.Pages.Posts
 {
     public class IndexModel : PageModel
     {
-        private readonly HE176084_MinhBT_A3.Models.BlogContext _context;
+        private readonly BlogContext _context;
 
-        public IndexModel(HE176084_MinhBT_A3.Models.BlogContext context)
+        public IndexModel(BlogContext context)
         {
             _context = context;
         }
 
-        public IList<Post> Post { get;set; } = default!;
+        public IList<Post> Post { get; set; } = new List<Post>();
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
 
-        public async Task OnGetAsync(string searchInput = "")
+        [BindProperty(SupportsGet = true)]
+        public string Query { get; set; } = string.Empty;
+
+        public async Task OnGetAsync()
         {
-            var userId = HttpContext.Session.GetInt32("UserID");
-            if (userId == null)
-            {
-                RedirectToPage("/AppUsers/Login");
-
-            }
-            if (!string.IsNullOrEmpty(searchInput))
-            {
-                Post = await _context.Posts
-                .Include(p => p.Author)
-                .Include(p => p.Category)
-                .Where(p => p.Title.Contains(searchInput) || p.Content.Contains(searchInput) || p.PostID.ToString().Contains(searchInput))
-                .ToListAsync();
-            }
-            else
-            {
-                Post = await _context.Posts.ToArrayAsync();
-            }
+            // Default method in case this page is accessed without AJAX
         }
-        public async Task<ContentResult> OnGetGetPostsAsync()
+
+        public async Task<JsonResult> OnGetGetPosts(int pageNumber = 1, string query = "")
         {
-            var posts = await _context.Posts.ToArrayAsync();
-            string jsonPost = JsonSerializer.Serialize(posts);
-            return Content(jsonPost);
+            Console.WriteLine("Page: " + pageNumber);
+            Console.WriteLine("Query: " + query);
+            int PageSize = 5; // Number of posts per page
+            var postsQuery = _context.Posts
+                .Include(p => p.Category)
+                .Where(p => string.IsNullOrEmpty(query) || p.Title.Contains(query) || p.Content.Contains(query))
+                .OrderByDescending(p => p.CreatedDate);
+
+            var totalPosts = await postsQuery.CountAsync();
+            TotalPages = (int)Math.Ceiling(totalPosts / (double)PageSize);
+
+            Post = await postsQuery
+                .Skip((pageNumber - 1) * PageSize)
+                .Take(PageSize)
+                .ToListAsync();
+
+            return new JsonResult(new
+            {
+                items = Post.Select(p => new
+                {
+                    p.PostID,
+                    p.CreatedDate,
+                    p.UpdatedDate,
+                    p.Title,
+                    p.Content,
+                    p.PublishStatus,
+                    p.AuthorID,
+                    p.CategoryID,
+                    Category = p.Category != null ? new
+                    {
+                        p.Category.CategoryName,
+                        p.Category.Description
+                    } : null
+                }),
+                totalPages = TotalPages
+            });
         }
     }
 }

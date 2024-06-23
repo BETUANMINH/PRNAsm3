@@ -4,22 +4,31 @@
 
 <h2>Register</h2>
 
+
 <form method="post">
     <div class="form-group">
         <label asp-for="RegisterUser.Fullname"></label>
         <input asp-for="RegisterUser.Fullname" class="form-control" />
+        <span asp-validation-for="RegisterUser.Fullname" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="RegisterUser.Address"></label>
         <input asp-for="RegisterUser.Address" class="form-control" />
+        <span asp-validation-for="RegisterUser.Address" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="RegisterUser.Email"></label>
         <input asp-for="RegisterUser.Email" class="form-control" />
+        <span asp-validation-for="RegisterUser.Email" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="RegisterUser.Password"></label>
         <input asp-for="RegisterUser.Password" type="password" class="form-control" />
+        <span asp-validation-for="RegisterUser.Password" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-primary">Register</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

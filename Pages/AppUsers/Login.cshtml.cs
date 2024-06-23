@@ -43,8 +43,7 @@ namespace HE176084_MinhBT_A3.Pages.AppUser
             var user = await _context.AppUsers.Where(x => x.Email == LoginUser.Email && x.Password == LoginUser.Password).FirstOrDefaultAsync();
             if (user == null)
             {
-                // Handle wrong case here
-                ModelState.AddModelError(string.Empty, "Invalid email or password");
+                ModelState.AddModelError("LoginUser.Email", "Email or password is incorrect");
                 return Page();
             }
             else

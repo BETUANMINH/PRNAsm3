@@ -30,7 +30,12 @@ app.UseRouting();
 
 app.UseAuthorization();
 app.MapHub<SignalRHub>("/signalrhub");
-
 app.MapRazorPages();
+
+//go to the login page by default
+app.MapGet("/", async (context) =>
+{
+    context.Response.Redirect("/AppUsers/Login");
+});
 
 app.Run();
